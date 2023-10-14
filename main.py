@@ -1,66 +1,66 @@
-rock = '''
-    _______
----'   ____)
-      (_____)
-      (_____)
-      (____)
----.__(___)
-'''
-
-paper = '''
-    _______
----'   ____)____
-          ______)
-          _______)
-         _______)
----.__________)
-'''
-
-scissors = '''
-    _______
----'   ____)____
-          ______)
-       __________)
-      (____)
----.__(___)
-'''
-
 import random
-x = int(input("What do you choose? Type 0 for Rock, 1 for Paper or 2 for Scissors\n"))
-# x represents human choice.
-print("You chose:")
+import time
 
-# I want to map the ASCII art with the 0, 1, or 2 that the user prints.
-if x == 0:
-  print(rock)
-elif x == 1:
-  print(paper)
-elif x == 2:
-  print(scissors)
+# ASCII Art
+choices_art = [
+    '''
+      _______
+  ---'   ____)
+        (_____)
+        (_____)
+        (____)
+  ---.__(___)
+  ''',
+    '''
+      _______
+  ---'   ____)____
+            ______)
+            _______)
+           _______)
+  ---.__________)
+  ''',
+    '''
+      _______
+  ---'   ____)____
+            ______)
+         __________)
+        (____)
+  ---.__(___)
+  '''
+]
 
-# y represents computer choice.
-y = random.randint(0 , 2)
-print("Computer Chose:")
-
-# I want to may the ASCII art with the 0, 1, or 2 that the computer chooses randomly.
-if y == 0:
-  print(rock)
-elif y == 1:
-  print(paper)
-elif y == 2:
-  print(scissors)
+choices = ["Rock", "Paper", "Scissors"]
 
 
+def play_rps(user_choice):
+    print(f"You chose:\n{choices_art[user_choice]}")
 
-# there are only 3 combinations as (0, 1), (1, 2), and (2, 0) for you to win and same three combination for you to lose and same 3 combination for you to draw.
-# if (x, y) represents the set of winning, then (y, x) represents the set of losing. (x, x) is the set of draw.
+    comp_choice = random.randint(0, 2)
+    time.sleep(1)  # Pause for a moment before revealing computer's choice
+    print(f"Computer chose:\n{choices_art[comp_choice]}")
 
-if x < 0 or x > 2:
-  print("You've typed an invalid number.")
-elif x == 0 and y == 2 or x == 2 and y == 1 or x == 1 and y == 0:
-  print("You've won.")
-elif x == y:
-  print("You've drawn.")
-else:
-  print("You've lost.")
+    if user_choice == comp_choice:
+        return "You've drawn."
+    elif (user_choice - comp_choice) % 3 == 1:
+        return "You've won."
+    else:
+        return "You've lost."
 
+
+# Main game logic
+while True:
+    try:
+        user_choice = input("What do you choose? Type 0 for Rock, 1 for Paper, 2 for Scissors, or 'q' to quit\n")
+
+        if user_choice == 'q':
+            print("Thanks for playing! Goodbye.")
+            break
+
+        user_choice = int(user_choice)
+        if user_choice not in [0, 1, 2]:
+            raise ValueError
+
+        print(play_rps(user_choice))
+        time.sleep(1)  # A small pause to let user read the result
+    except ValueError:
+        print("Invalid input! Please enter a valid number (0, 1, or 2) or 'q' to quit.")
