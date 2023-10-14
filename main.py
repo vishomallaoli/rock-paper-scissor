@@ -1,76 +1,18 @@
-import random
-import time
-from colorama import Fore, Style, init
+from colorama import Fore, init
+from visuals import display_choice_query, display_goodbye_message, display_invalid_input_message
+from game_logic import play_rps
+from utility import clear_screen
 
-# Initialize colorama
+
 init(autoreset=True)
-
-# ASCII Art
-choices_art = [
-    '''
-        _______
-    ---'   ____)
-          (_____)
-          (_____)
-          (____)
-    ---.__(___)
-    ''',
-    '''
-        _______
-    ---'   ____)____
-              ______)
-              _______)
-             _______)
-    ---.__________)
-    ''',
-    '''
-        _______
-    ---'   ____)____
-              ______)
-           __________)
-          (____)
-    ---.__(___)
-    '''
-]
-
-choices = ["Rock", "Paper", "Scissors"]
-
-
-def play_rps(user_choice, scores):
-    user_art_lines = choices_art[user_choice].split('\n')
-    comp_choice = random.randint(0, 2)
-    comp_art_lines = choices_art[comp_choice].split('\n')
-
-    print("You chose:                           Computer chose:")
-    for ua, ca in zip(user_art_lines, comp_art_lines):
-        print(f"{ua:35} {ca}")
-
-    if user_choice == comp_choice:
-        result = f"{Fore.YELLOW}You've drawn."
-    elif (user_choice - comp_choice) % 3 == 1:
-        result = f"{Fore.GREEN}You've won!"
-        scores['user'] += 1
-    else:
-        result = f"{Fore.RED}You've lost."
-        scores['computer'] += 1
-
-    print(result)
-    print(f"\n{Fore.CYAN}Score: You {scores['user']} - {scores['computer']} Computer\n")
-    return scores
-
-
-# Main game logic
 scores = {'user': 0, 'computer': 0}
 
 while True:
-    print(
-        f"{Fore.BLUE}What do you choose? Type {Fore.WHITE}0{Fore.BLUE} for Rock, {Fore.WHITE}1{Fore.BLUE} for Paper, {Fore.WHITE}2{Fore.BLUE} for Scissors, or {Fore.WHITE}'q'{Fore.BLUE} to quit")
+    display_choice_query(scores)
     try:
         user_choice = input()
-
         if user_choice == 'q':
-            print(
-                f"{Fore.MAGENTA}Thanks for playing! Final Score: You - {scores['user']}, Computer - {scores['computer']}")
+            display_goodbye_message(scores)
             break
 
         user_choice = int(user_choice)
@@ -78,6 +20,7 @@ while True:
             raise ValueError
 
         scores = play_rps(user_choice, scores)
-        time.sleep(1)
+        input("Press Enter to continue...")
+        clear_screen()
     except ValueError:
-        print(f"{Fore.RED}Invalid input! Please enter a valid number (0, 1, or 2) or 'q' to quit.")
+        display_invalid_input_message()
