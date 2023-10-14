@@ -37,11 +37,13 @@ choices = ["Rock", "Paper", "Scissors"]
 
 
 def play_rps(user_choice, scores):
-    print(f"You chose:\n{choices_art[user_choice]}")
-
+    user_art_lines = choices_art[user_choice].split('\n')
     comp_choice = random.randint(0, 2)
-    time.sleep(1)
-    print(f"Computer chose:\n{choices_art[comp_choice]}")
+    comp_art_lines = choices_art[comp_choice].split('\n')
+
+    print("You chose:                           Computer chose:")
+    for ua, ca in zip(user_art_lines, comp_art_lines):
+        print(f"{ua:35} {ca}")
 
     if user_choice == comp_choice:
         result = f"{Fore.YELLOW}You've drawn."
